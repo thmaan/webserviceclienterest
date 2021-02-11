@@ -71,8 +71,40 @@ public class App
 
 		}
 	}
-	
 	public static void get() {
+		try {
+			URL url = new URL("http://localhost:5000/todos-dados");
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json");
+	
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+			}
+	
+			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+	
+			String output;
+			System.out.println("Output from Server .... \n");
+			while ((output = br.readLine()) != null) {
+				System.out.println(output);
+			}
+	
+			conn.disconnect();
+	
+		} catch (MalformedURLException e) {
+	
+			e.printStackTrace();
+	
+		} catch (IOException e) {
+	
+			e.printStackTrace();
+	
+		}
+			
+	}
+
+	public static void getId() {
 		try {
 		
 			URL url = new URL("http://localhost:5000/dados-filtrados-datahora");
@@ -216,14 +248,14 @@ public class App
 			while(true) {
 			post();
 			Thread.sleep(10000);
-			}
+
+			//Thread.currentThread().interrupt();
+		}
 		}catch(InterruptedException ex) {
 			ex.printStackTrace();
 		}
 		
-		
 		//get();
-		
 		
 		//delete();
 		//put();
